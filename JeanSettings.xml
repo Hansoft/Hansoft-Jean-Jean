@@ -30,7 +30,8 @@
     EventWindow               : The max number of milliseconds that events will be buffered/queued for. This is used to avoid excessive server load when
                                 you have behaviors that potentially have a significant impact on the server load.
     -->
-  <Connection HansoftServerHost="localhost" HansoftServerPort="50257" HansoftDatabase="Reporting" HansoftSdkUser="sdk" HansoftSdkUserPassword="sdk" EventWindow="500"/>
+  <!-- Connect to the database MyDB on the Hansoft server running on the local machine on port 50256 as the SDK user sdk with password sdk. Use event buffering upto 1 second. -->
+  <Connection HansoftServerHost="localhost" HansoftServerPort="50256" HansoftDatabase="MyDB" HansoftSdkUser="sdk" HansoftSdkUserPassword="sdk" EventWindow="1000"/>
   
   <!-- 
   In the Behaviors section you specify what behaviors that you want to apply you can specify multiple behaviors of the same or different types as you like.
@@ -57,10 +58,15 @@
                                 Specifying this setting is exclusive with specifying the IgnoreLevels setting.
     IgnoreLevels              : Specified levels will not be labeled.  Levels are counted from the top staring with 1.
                                 Specifying this setting is exclusive with specifying the LabelLevels setting.
+
+    Example
+    '''''''
+    To add hierarchical numbering to the custom column Rank (of type text) in the product backlog of the project MyProject, uncomment the following line: 
     -->
-
-    <NumberBehavior HansoftProject="Development Program" View="Backlog" ColumnName="Rank" NumberingStyle="Hierarchical" LabelLevels="" IgnoreLevels="" />
-
+    <!--
+    <NumberBehavior HansoftProject="MyProject" View="Backlog" ColumnName="Rank" NumberingStyle="Hierarchical" LabelLevels="" IgnoreLevels="" />
+    -->
+    
     <!--
     Copy Behavior
     =============
@@ -91,11 +97,13 @@
     Generally speaking it is safest to map columns of the same type to one another. But as long as it possible to convert a value from one
     type or another it is possible to map one column type to another type. For example, all column types can be mapped to a Text type column.
     
-    Examples:
-    TODO: Come up with some reasonable examples
+    Example
+    '''''''
+    Uncomment the following section to synchronize selected columns of linked items from the product backlog in the  project Program to the
+    product backlog in the project Portfolio.
     -->
     <!--
-    <CopyBehavior TargetProject="Portfolio" TargetView="Backlog" TargetFind="" SourceProject="Development Program" SourceView="Backlog" SourceFind="">
+    <CopyBehavior TargetProject="Portfolio" TargetView="Backlog" TargetFind="" SourceProject="Program" SourceView="Backlog" SourceFind="">
       <ColumnMapping>
         <Source>
           <CustomColumn Name="Aggregated Status"/>
@@ -138,160 +146,7 @@
       </ColumnMapping>
     </CopyBehavior>
     -->
-    <CopyBehavior TargetProject="Development Program" TargetView="Backlog" TargetFind="" SourceProject="Portfolio" SourceView="Backlog" SourceFind="">
-      <ColumnMapping>
-        <Source>
-          <Name />
-        </Source>
-        <Target>
-          <Name />
-        </Target>
-      </ColumnMapping>
-    </CopyBehavior>
-    <!--
-    <CopyBehavior TargetProject="Reporting" TargetView="Bugs" TargetFind="&quot;Status Workflow&quot;=New" SourceProject="Reporting" SourceView="Bugs" SourceFind="&quot;Status Workflow&quot;=Closed">
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Text" />
-        </Source>
-        <Target>
-          <CustomColumn Name="Text" />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Single Choice" />
-        </Source>
-        <Target>
-          <CustomColumn Name="Single Choice" />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Folk" />
-        </Source>
-        <Target>
-          <CustomColumn Name="Folk" />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Datum" />
-        </Source>
-        <Target>
-          <CustomColumn Name="Datum" />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Number" />
-        </Source>
-        <Target>
-          <CustomColumn Name="Number" />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <Priority />
-        </Source>
-        <Target>
-          <Priority />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <Status />
-        </Source>
-        <Target>
-          <Status />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <Confidence />
-        </Source>
-        <Target>
-          <Confidence />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <Risk />
-        </Source>
-        <Target>
-          <Risk />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <WorkRemaining />
-        </Source>
-        <Target>
-          <WorkRemaining />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <Name />
-        </Source>
-        <Target>
-          <Name />
-        </Target>
-      </ColumnMapping>
-    </CopyBehavior>
-    -->
-      <!--
-    <CopyBehavior TargetProject="Links" TargetView="Backlog" TargetFind="" SourceProject="Reporting" SourceView="Backlog" SourceFind="">
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Number" />
-        </Source>
-        <Target>
-          <Points />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <EstimatedDays />
-        </Source>
-        <Target>
-          <CustomColumn Name="Length" />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Text" />
-        </Source>
-        <Target>
-          <CustomColumn Name="Folk" />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <CustomColumn Name="Time spent" />
-        </Source>
-        <Target>
-          <Name />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <Status />
-        </Source>
-        <Target>
-          <Risk />
-        </Target>
-      </ColumnMapping>
-      <ColumnMapping>
-        <Source>
-          <Risk />
-        </Source>
-        <Target>
-          <Status />
-        </Target>
-      </ColumnMapping>
-    </CopyBehavior>
-    -->
+   
     <!-- 
     Derive Behavior
     ===============
@@ -358,46 +213,26 @@
     NOTE: Floating point values always use period (.) as the decimal symbol, regardless of the Region settings in Windows. I.e., you should specify
     values as they appear in Hansoft.
     
-    Examples:
-    1. Set the custom column child count to the number of children of the current task
-    <CustomColumn Name="Child count" Expression="current_task.Children.Count" />
-    
-    2. Set the Points column to the same value as the EstimatedDays column.
-    <Points Expression="current_task.EstimatedDays" />
-    
-    3. Set the custom column completion count to the result of the static function CompletionCount defined in the CompletionCounter class which is a custom
+    Example
+    '''''''
+    Uncomment the following section to derive column values in the product backlog of the project MyProject as follows:
+    1. Set the custom column Child count to the number of children of the current task    
+    2. Set the the custom column Aggregated Status to the aggregated status value of the current task.
+    3. Set the the custom column Aggregated Estimated days to the aggregated estimated days value of the current task.
+    4. Set the the custom column Days completed to the sum of the estimated days for all completed items that are children of the current task.
+    5. Set the custom column completion count to the result of the static function CompletionCount defined in the CompletionCounter class which is a custom
     class defined in an assembly that is loaded in the <LoadAssemblies> section.
-    <CustomColumn Name="Completion count" Expression="Hansoft.Jean.Behavior.DeriveBehavior.Expressions.CompletionCounter.CompletionCount(current_task)" />
-    
-    4. Other various examples     
-      <CustomColumn Name="Custom Hyperlink" Expression="&quot;http://www.hansoft.com&quot;" />
-      <CustomColumn Name="Datum" Expression="DateTime.Now" />
-      <CustomColumn Name="Datum och Tid" Expression="DateTime.Now" />
-      <CustomColumn Name="Number" Expression="current_task.EstimatedDays" />
-      <CustomColumn Name="Text" Expression="current_task.Parent" />
-      <CustomColumn Name="Multi Line" Expression="&quot;Muchos Textos. \n This is a new line \n this is the third line This is a backslash\\.&quot;" />
-      <CustomColumn Name="Single Choice" Expression="&quot;No&quot;" />
-      <CustomColumn Name="Multiple Choice" Expression="&quot;One;Three&quot;" />
-      <CustomColumn Name="Folk" Expression="&quot;Svante;Cyborgs;Manager Jim&quot;" />
-      <CustomColumn Name="Time spent" Expression="4.3" />
-      <CustomColumn Name="Length" Expression="DateTime.Now.Year" />
-      <WorkRemaining Expression="40.2" />
-      <Risk Expression="3" />
-      <Priority Expression="3" />
-      <Category Expression="3" />
-      <Confidence Expression="3" />
-      <Status Expression="3" />
-      <EstimatedDays Expression="5" />
-      <Points Expression="10" />
-      <Hyperlink Expression="&quot;http://www.hansoft.com&quot;" />
-      <Name Expression="&quot;My new backlog item&quot;" />
     -->
-    <DeriveBehavior HansoftProject="Development Program" View="Backlog" Find="">
+    <!--
+    <DeriveBehavior HansoftProject="MyProject" View="Backlog" Find="">
+      <CustomColumn Name="Child count" Expression="current_task.Children.Count" />
       <CustomColumn Name="Aggregated Status" Expression="current_task.AggregatedStatus" />
       <CustomColumn Name="Aggregated Estimated days" Expression="current_task.AggregatedEstimatedDays" />
       <CustomColumn Name="Days completed" Expression="current_task.DeepLeaves.FindAll(task => ((Task)task).Status.Equals(EHPMTaskStatus.Completed)).Sum(task => ((Task)task).EstimatedDays)" />
       <CustomColumn Name="Completion count" Expression="Hansoft.Jean.Behavior.DeriveBehavior.Expressions.CompletionCounter.CompletionCount(current_task)" />
     </DeriveBehavior>
+    -->
+    
     <!-- 
     Default Value Behavior
     ======================
@@ -452,9 +287,15 @@
     * Default values for Date columns should be specified in the Short Date Format as specified in the Windows Region and Language settings.
     * Default values for Date Time columns should be specified in the Long Time Format as specified in the Windows Region and Language settings. Note
       however that the actual time value should be specified as UTC, not the local time.
+      
+    Example
+    '''''''
+    To set a default template for the name of new items created in the product backlog of the project MyProject, uncomment the following:
     --> 
-    <DefaultValueBehavior HansoftProject="Development Program" View="Backlog">
+    <!--
+    <DefaultValueBehavior HansoftProject="MyProject" View="Backlog">
       <Name DefaultValue="As a (role) I want to (something) so I can (benefit)" />
     </DefaultValueBehavior>
+    -->
   </Behaviors>
 </Configuration>
