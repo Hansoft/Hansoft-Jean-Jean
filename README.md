@@ -98,7 +98,7 @@ There are also settings for each behavior instance that specifies the parameters
 consistently with the class defining behavior and the dll where it is placed. For example, the DefaultValueBehavior is defined by the class
 DefaultValueBehavior in DefaultValueBehavior.dll and is instantiated by adding a <DefaultValue> element to the settings file.
 
-All settings are described in detail in the settings file [JeanSettings.xml]. (JeanSettings.xml)
+All settings are described in detail in the settings file [JeanSettings.xml] (JeanSettings.xml)
 
 Note: If you change the settings you need to restart the Jean service for them to take effect.
 
@@ -110,7 +110,7 @@ that you are interested in.
 To get started take a look at the provided examples. The DefaultValue behavior is a very simple behavior but demonstrates a lot of the
 mechanics.
 
-Refer also to the detailed documentation of AbstractBehavior found in the [API Reference] (../Hansoft-Jean-Behavior/Behavior.chm).
+Refer also to the detailed documentation of AbstractBehavior found in the [API Reference] (https://github.com/Hansoft/Hansoft-Jean-Behavior/blob/master/Behavior.chm).
 
 Design
 ------
@@ -135,7 +135,7 @@ to Jean but can be used to build different kinds of SDK applications.
 
 Please refer to the example behaviors for how to use ObjectWrapper in the context of Jean for Hansoft.
 
-For detailed information about ObjectWrapper refer to the [ObjectWrapper API Reference] (../Hansoft-ObjectWrapper/ObjectWrapper.chm).
+For detailed information about ObjectWrapper refer to the [ObjectWrapper API Reference] (https://github.com/Hansoft/Hansoft-ObjectWrapper/blob/master/ObjectWrapper.chm).
 
 Why is it called Jean?
 ======================
