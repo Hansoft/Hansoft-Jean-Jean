@@ -14,6 +14,8 @@
     <Assembly Path="CopyBehavior.dll" />
     <Assembly Path="DeriveBehavior.dll" />
     <Assembly Path="DefaultValueBehavior.dll" />
+    <Assembly Path="TrackLastStatusChangeBehavior.dll" />
+    <Assembly Path="AssignReleaseRiskBehavior.dll" />
     <Assembly Path="DerivedColumnExpressionExample.dll" />
   </LoadAssemblies>op
   
@@ -296,6 +298,60 @@
     <DefaultValueBehavior HansoftProject="MyProject" View="Backlog">
       <Name DefaultValue="As a (role) I want to (something) so I can (benefit)" />
     </DefaultValueBehavior>
+    -->
+
+    <!--
+    Track Last Status Change Behavior
+    =================================
+    This behavior useful if you want to track when product backlog items last changed their status. 
+
+    The behavior has parameters as follows:
+    HansoftProject            : Name of the Hansoft project in which you want to track status changes in the product backlog.
+    TrackingColumn            : Specifies the Hansoft column to keep the time stamp for the last status change, this should be a readonly custom column of type Date and time.
+
+    Example
+    '''''''
+    To add tracking of the last status change in the column "Status last changed" in the product backlog of the project MyProject, uncomment the following line: 
+    -->
+    <!--
+    <TrackLastStatusChangeBehavior HansoftProject="MyProject" TrackingColumn="Status last changed" />
+    -->
+
+    <!--
+    Assign Release Risk Behavior
+    ============================
+    This behavior useful if you want to track the risk that product backlog items will miss their assigned release date. The behavior automatically updates a column in the product backlog
+    that defines the release risk for an item. Items are categorized as "Done", "Low risk", "Medium risk", or "High risk". The items that are targeted to a particular release are calculated
+    in the same way as when release burndowns are calculated in the Hansoft client. Items are considered as part of a release if:
+    a) The item is committed to a sprint and that sprint is tagged to the release.
+       or
+    b) The item is not committed to a sprint but it is tagged in the product backlog to the release.
+    
+    The release risk is based on the predicted veloicty (same as if you hover over a future date in the release burndown in Hansoft) and the number of remaining working days until the
+    release date. This gives the expected number of points or ideal days that can be completed from the current time up to the release date. This is the "Expected" value. The release risk value is then calculated using
+    a  provided "Factor" that is between 0 an 1 as follows:
+    Done         - Items that have the status Completed.
+    Low risk     - Items that fit within (1-Factor)*Expected
+    Medium risk  - Items that fit within (1+Factor)*Expected
+    High risk    - Any remaining items that are not completed and don't fit within (1+Factor)*Expected.
+    
+    The behavior has parameters as follows:
+    HansoftProject            : Name of the Hansoft project in which you want to track release risk in the product backlog.
+    TrackingColumn            : Specifies the Hansoft column that tracks the release risk. This should be a readonly custom column of type Drop list single choice. There should be four values defined
+                                representing done, low risk, medium risk and high risk items respectively.
+    RiskValues                : Defines the name of the different risk levels in the Hansoft client. These values must exactly match the values provided in the column defintion in Hansoft.
+                                The items are provided as a comma-separated list in the order "<done-value>, <low-risk-value>, <medium-risk-value>, <high-risk-value>".
+    ParentName                : The releases for which backlog items should be assigned a release risk must be placed in a subproject in the Hansoft schedule with a name defined by this parameter.
+    PointsOrDays              : Defines whether release risk is calculated based on Points or Ideal days as the estimate for backlog items. Allowed values are "Days" or "Points".
+    Factor                    : The factor that is used to calculate the limits for low, medium, and high release risk. Note that your localized floating point separator should be used (comma below
+                                which you may need to change to e.g., a point depending on your locale.
+
+    Example
+    '''''''
+    To add tracking of the last status change in the column "Status last changed" in the product backlog of the project MyProject, uncomment the following line: 
+    -->
+    <!--
+    <AssignReleaseRiskBehavior HansoftProject="MyProject" TrackingColumn="Release risk" RiskValues="Done, Low risk, Medium risk, High risk" ParentName="Features" PointsOrDays="Days" Factor="0,2" />
     -->
   </Behaviors>
 </Configuration>

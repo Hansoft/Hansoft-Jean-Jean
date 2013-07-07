@@ -77,12 +77,14 @@ namespace Hansoft.Jean
                         logger.Error("Could not open connection to Hansoft");
                     else
                     {
+                        //TODO: The hooking up of the event handlers should be pushed down into a registration function in CallbackHandler
                         foreach (AbstractBehavior b in behaviors)
                         {
                             callbackHandler.TaskChange += new System.EventHandler<TaskChangeEventArgs>(b.OnTaskChange);
                             callbackHandler.TaskChangeCustomColumnData += new System.EventHandler<TaskChangeCustomColumnDataEventArgs>(b.OnTaskChangeCustomColumnData);
                             callbackHandler.TaskCreate += new System.EventHandler<TaskCreateEventArgs>(b.OnTaskCreate);
                             callbackHandler.TaskMove += new System.EventHandler<TaskMoveEventArgs>(b.OnTaskMove);
+                            callbackHandler.DataHistoryReceived += new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
                             callbackHandler.TaskDelete += new System.EventHandler<TaskDeleteEventArgs>(b.OnTaskDelete);
                             callbackHandler.BeginProcessBufferedEvents += new System.EventHandler<EventArgs>(b.OnBeginProcessBufferedEvents);
                             callbackHandler.EndProcessBufferedEvents += new System.EventHandler<EventArgs>(b.OnEndProcessBufferedEvents);
@@ -97,6 +99,7 @@ namespace Hansoft.Jean
                                 callbackHandler.TaskChangeCustomColumnData -= new System.EventHandler<TaskChangeCustomColumnDataEventArgs>(b.OnTaskChangeCustomColumnData);
                                 callbackHandler.TaskCreate -= new System.EventHandler<TaskCreateEventArgs>(b.OnTaskCreate);
                                 callbackHandler.TaskMove -= new System.EventHandler<TaskMoveEventArgs>(b.OnTaskMove);
+                                callbackHandler.DataHistoryReceived -= new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
                                 callbackHandler.TaskDelete -= new System.EventHandler<TaskDeleteEventArgs>(b.OnTaskDelete);
                                 callbackHandler.BeginProcessBufferedEvents -= new System.EventHandler<EventArgs>(b.OnBeginProcessBufferedEvents);
                                 callbackHandler.EndProcessBufferedEvents -= new System.EventHandler<EventArgs>(b.OnEndProcessBufferedEvents);
@@ -222,7 +225,7 @@ namespace Hansoft.Jean
                                 }
                                 break;
                             default:
-                                throw new FormatException("Error in configuration file JeanSettings.xml. Expected element of type Connection or Behaviors, got " + el.Name);
+                                throw new FormatException("Error in configuration file JeanSettings.xml. Expected element of type Connection, Behaviors, or LoadAssemblies, got " + el.Name);
                         }
                     }
                 }

@@ -13,6 +13,8 @@ The example behaviors are:
 * Copy - Copy a column value from one item to another linked item. Useful for example to propagate values across projects.
 * Derive - Derive a column value automatically based on an expression referring to other columns and/or parent and/or child items
 * DefaultValue - Specify a default value for one or several columns that should be applied when items when are created.
+* AssignReleaseRisk - Tracs the risk that product backlog items will miss their assigned release date.
+* TrackLastStatusChange - Track when product backlog items last changed their status. 
 
 Terms and conditions
 --------------------

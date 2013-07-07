@@ -29,9 +29,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectWrapper", "..\Hansoft
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultValueBehavior", "..\Hansoft-Jean-DefaultValueBehavior\DefaultValueBehavior.csproj", "{72486932-7699-4F2F-B2DD-EBC892FD1754}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hansoft-Jean-DerivedColumnExpressionExample", "..\Hansoft-Jean-DerivedColumnExpressionExample\DerivedColumnExpressionExample.csproj", "{E0B9344B-7150-4B43-A3E2-B62C2FB487E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DerivedColumnExpressionExample", "..\Hansoft-Jean-DerivedColumnExpressionExample\DerivedColumnExpressionExample.csproj", "{E0B9344B-7150-4B43-A3E2-B62C2FB487E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleLogging", "..\Hansoft-SimpleLogging\SimpleLogging.csproj", "{1A62067E-BD06-47C4-85F8-F4106699838A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackLastStatusChangeBehavior", "..\Hansoft-Jean-TrackLastStatusChangeBehavior\TrackLastStatusChangeBehavior.csproj", "{4C717023-CFCA-4A18-9885-9847FA3F4FC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssignReleaseRiskBehavior", "..\Hansoft-Jean-AssignReleaseRiskBehavior\AssignReleaseRiskBehavior.csproj", "{248C9639-B6CE-4038-AF89-4A58686CBBFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +99,18 @@ Global
 		{1A62067E-BD06-47C4-85F8-F4106699838A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A62067E-BD06-47C4-85F8-F4106699838A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1A62067E-BD06-47C4-85F8-F4106699838A}.Release|x86.ActiveCfg = Release|Any CPU
+		{4C717023-CFCA-4A18-9885-9847FA3F4FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C717023-CFCA-4A18-9885-9847FA3F4FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C717023-CFCA-4A18-9885-9847FA3F4FC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C717023-CFCA-4A18-9885-9847FA3F4FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C717023-CFCA-4A18-9885-9847FA3F4FC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C717023-CFCA-4A18-9885-9847FA3F4FC8}.Release|x86.ActiveCfg = Release|Any CPU
+		{248C9639-B6CE-4038-AF89-4A58686CBBFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{248C9639-B6CE-4038-AF89-4A58686CBBFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{248C9639-B6CE-4038-AF89-4A58686CBBFC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{248C9639-B6CE-4038-AF89-4A58686CBBFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{248C9639-B6CE-4038-AF89-4A58686CBBFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{248C9639-B6CE-4038-AF89-4A58686CBBFC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
