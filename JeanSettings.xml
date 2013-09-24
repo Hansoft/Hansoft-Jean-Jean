@@ -17,58 +17,38 @@
     <Assembly Path="TrackLastStatusChangeBehavior.dll" />
     <Assembly Path="AssignReleaseRiskBehavior.dll" />
     <Assembly Path="DerivedColumnExpressionExample.dll" />
-  </LoadAssemblies>op
+  </LoadAssemblies>
   
   <!--
   Configuration - Connecting to a Hansoft Database
   =================================================
-    The connection parameters are common for all behaviors, hence Jean for Hansoft can currently only operate on one database at the time,
   
-    HansoftServerHost         : IP or DNS name of the Hansoft server
-    HansoftServerPort         : The listen port of the Hansoft server
-    HansoftSdkUser            : Name of the Hansoft SDK User account
-    HansoftSdkUserPassword    : Password of the Hansoft SDK User account
-    HansoftDatabase           : Name of the Hansoft Database to get data from
-    EventWindow               : The max number of milliseconds that events will be buffered/queued for. This is used to avoid excessive server load when
+  
+  The connection parameters are common for all behaviors, hence Jean for Hansoft can currently only operate on one database at the time,
+
+  The connection is specified in the Connection element.
+    
+  Parameters
+  ''''''''''
+  HansoftServerHost         : IP or DNS name of the Hansoft server
+  HansoftServerPort         : The listen port of the Hansoft server
+  HansoftSdkUser            : Name of the Hansoft SDK User account
+  HansoftSdkUserPassword    : Password of the Hansoft SDK User account
+  HansoftDatabase           : Name of the Hansoft Database to get data from
+  EventWindow               : The max number of milliseconds that events will be buffered/queued for. This is used to avoid excessive server load when
                                 you have behaviors that potentially have a significant impact on the server load.
-    -->
-  <!-- Connect to the database MyDB on the Hansoft server running on the local machine on port 50256 as the SDK user sdk with password sdk. Use event buffering upto 1 second. -->
+  Example
+  '''''''
+  Connect to the database MyDB on the Hansoft server running on the local machine on port 50256 as the SDK user sdk with password sdk. Use event buffering upto 1 second.
   <Connection HansoftServerHost="localhost" HansoftServerPort="50256" HansoftDatabase="MyDB" HansoftSdkUser="sdk" HansoftSdkUserPassword="sdk" EventWindow="1000"/>
+  -->
   
   <!-- 
-  In the Behaviors section you specify what behaviors that you want to apply you can specify multiple behaviors of the same or different types as you like.
+  In the Behaviors section you specify what behaviors that you want to apply. You can specify multiple behaviors of the same or different types as you like.
   NOTE: Whenever you add additional behaviors it is important that you monitor server load carefully for some time including peak usage to avoid adding
   to many performance demanding behaviors that risk to be detrimental to server performance with an impact to human users.
   -->
   <Behaviors>
-  
-    <!--
-    Number Behavior
-    ===============
-    This behavior useful if you want to have a ranking number in the product backlog hierarchy in Hansoft. The number is
-    kept in a selectable Hansoft column (of type text). When the column is added to your Hansoft project it should be set
-    to a readonly column so it isn't advertently changed.
-
-    The numbering is updated automatically as items in the product backlog hierarchy are moved/added/deleted.
-    
-    HansoftProject            : Name of the Hansoft project
-    View                      : Specifies the View to which the numbering should be applied (Agile, Scheduled, Backlog)
-    NumberingStyle            : Hierarchical numbering mean to e.g. to denote the second child of the first parent as 1.2, the default is Flat
-                                numbering, i.e. to number each set of siblings 1, 2, 3 and so on. Hence the supported values are "Hierarchical" or "Flat".
-    ColumnName                : Specifies the Hansoft column to keep the numbering, this should be a readonly custom column of type Text
-    LabelLevels               : Only specified levels in the hierarchy will be labeled. Levels are counted from the top staring with 1.
-                                Specifying this setting is exclusive with specifying the IgnoreLevels setting.
-    IgnoreLevels              : Specified levels will not be labeled.  Levels are counted from the top staring with 1.
-                                Specifying this setting is exclusive with specifying the LabelLevels setting.
-
-    Example
-    '''''''
-    To add hierarchical numbering to the custom column Rank (of type text) in the product backlog of the project MyProject, uncomment the following line: 
-    -->
-    <!--
-    <NumberBehavior HansoftProject="MyProject" View="Backlog" ColumnName="Rank" NumberingStyle="Hierarchical" LabelLevels="" IgnoreLevels="" />
-    -->
-    
     <!--
     Copy Behavior
     =============
@@ -101,10 +81,8 @@
     
     Example
     '''''''
-    Uncomment the following section to synchronize selected columns of linked items from the product backlog in the  project Program to the
-    product backlog in the project Portfolio.
-    -->
-    <!--
+    Synchronize selected columns of linked items from the product backlog in the  project Program to the product backlog in the project Portfolio.
+
     <CopyBehavior TargetProject="Portfolio" TargetView="Backlog" TargetFind="" SourceProject="Program" SourceView="Backlog" SourceFind="">
       <ColumnMapping>
         <Source>
@@ -147,9 +125,8 @@
         </Target>
       </ColumnMapping>
     </CopyBehavior>
-    -->
-   
-    <!-- 
+
+
     Derive Behavior
     ===============
     The derive behavior is used to have a column value that is derived automatically based on the values of other columns and items.
@@ -161,6 +138,16 @@
 
     You can always refer to the current task with current_task. Note that this will be a task object provided by the ObjectWrapper. You can return
     any value in the expression but for the behavior to work the following constraints apply:
+    
+    Parameters
+    ''''''''''
+    HansoftProject      : The Hansoft project containing the items for which column values should be derived
+    View                : Specifies the View in which the items are found (Agile, Scheduled, Bugs, Backlog)
+    Find                : A Find query that specifies the items for which column values should be derived.
+    
+    For each column value that should have its value derived you specify one element. The element name is either the name of
+    the column (as listed below) or CustomColumn. For each column you then specify how the value should be derived in the Expression
+    attribute of the corresponding element (see also the examples below).
     
     Builtin columns
     '''''''''''''''
@@ -204,9 +191,9 @@
     * People
     
     Other columns
-    * When specifying default values for For multiline text columns you insert line breaks with \n and backslashes with \\.
-    * Default values for Date columns should be specified in the Short Date Format as specified in the Windows Region and Language settings.
-    * Default values for Date Time columns should be specified in the Long Time Format as specified in the Windows Region and Language settings. Note
+    * When deriving values for For multiline text columns you insert line breaks with \n and backslashes with \\.
+    * Values for Date columns should be specified in the Short Date Format as specified in the Windows Region and Language settings.
+    * Values for DateTime columns should be specified in the Long Time Format as specified in the Windows Region and Language settings. Note
       however that the actual time value should be specified as UTC, not the local time.
     
     NOTE: To specify a string constant in the expression you will need to replace double quoutes with  "&quot;" to make sure that the XML attribute
@@ -218,31 +205,98 @@
     Example
     '''''''
     Uncomment the following section to derive column values in the product backlog of the project MyProject as follows:
-    1. Set the custom column Child count to the number of children of the current task    
-    2. Set the the custom column Aggregated Status to the aggregated status value of the current task.
-    3. Set the the custom column Aggregated Estimated days to the aggregated estimated days value of the current task.
-    4. Set the the custom column Days completed to the sum of the estimated days for all completed items that are children of the current task.
-    5. Set the custom column completion count to the result of the static function CompletionCount defined in the CompletionCounter class which is a custom
+    1. Set the Estimated days column to the same value as the Points column.
+    2. Set the custom column Child count to the number of children of the current task    
+    3. Set the the custom column Aggregated Status to the aggregated status value of the current task.
+    4. Set the the custom column Aggregated Estimated days to the aggregated estimated days value of the current task.
+    5. Set the the custom column Days completed to the sum of the estimated days for all completed items that are children of the current task.
+    6. Set the custom column completion count to the result of the static function CompletionCount defined in the CompletionCounter class which is a custom
     class defined in an assembly that is loaded in the <LoadAssemblies> section.
-    -->
-    <!--
+
     <DeriveBehavior HansoftProject="MyProject" View="Backlog" Find="">
+      <EstimatedDays Expression="current_task.Points" />
       <CustomColumn Name="Child count" Expression="current_task.Children.Count" />
       <CustomColumn Name="Aggregated Status" Expression="current_task.AggregatedStatus" />
       <CustomColumn Name="Aggregated Estimated days" Expression="current_task.AggregatedEstimatedDays" />
       <CustomColumn Name="Days completed" Expression="current_task.DeepLeaves.FindAll(task => ((Task)task).Status.Equals(EHPMTaskStatus.Completed)).Sum(task => ((Task)task).EstimatedDays)" />
       <CustomColumn Name="Completion count" Expression="Hansoft.Jean.Behavior.DeriveBehavior.Expressions.CompletionCounter.CompletionCount(current_task)" />
     </DeriveBehavior>
-    -->
+
+
+    Track Last Status Change Behavior
+    =================================
+    This behavior useful if you want to track when product backlog items last changed their status. This is for example useful to create reports that filter out items
+    that have entered a certain status in a certain timespan. This behavior should be used in combination with the Derive behavior as described below.
+
+    Parameters
+    ''''''''''    
+    HansoftProject            Name of the Hansoft project in which you want to track status changes in the product backlog.
+    View                      Specifies the View for which status changes should be tracked (Agile, Scheduled, Backlog)
+    TrackingColumn            Specifies the Hansoft column to keep the time stamp for the last status change, this should be a readonly custom column of type Date and time.
+    TrackedColumn             Specified the column to track. This should normally be set up so that this is a read-only custom column of type text that is set to the
+                              aggregated status value by applying the DeriveBehavior (see example below).
+
+    Example
+    '''''''
+    Add tracking of the last status change in the column "Status last changed" in the product backlog of the project MyProject.
+    <DeriveBehavior HansoftProject="MyProject" View="Backlog" Find="">
+      <CustomColumn Name="Aggregated status" Expression="current_task.AggregatedStatus" />
+    </DeriveBehavior>
+    <TrackLastStatusChangeBehavior HansoftProject="MyProject" View="Backlog" TrackingColumn="Status last changed" TrackedColumn="Aggregated status"/>
+ 
+
+    Assign Release Risk Behavior
+    ============================
+    This behavior useful if you want to track the risk that product backlog items will miss their assigned release date. The behavior automatically updates a column in the product backlog
+    that defines the release risk for an item. Items are categorized as "Done", "Low risk", "Medium risk", or "High risk". The items that are targeted to a particular release are calculated
+    in the same way as when release burndowns are calculated in the Hansoft client. Items are considered as part of a release if:
+    a) The item is committed to a sprint and that sprint is tagged to the release.
+       or
+    b) The item is not committed to a sprint but it is tagged in the product backlog to the release.
     
-    <!-- 
+    The release risk is based on the predicted velocity (same as if you hover over a future date in the release burndown in Hansoft) and the number of remaining working days until the
+    release date. This gives the expected number of points or ideal days that can be completed from the current time up to the release date. This is the "Expected" value. The release risk value is then calculated using
+    a  provided "Factor" that is between 0 an 1 as follows:
+    Done         - Items that have the status Completed.
+    Low risk     - Items that fit within LowRiskLimit/100*Expected
+    Medium risk  - Items that fit within HighRiskLimit/100*Expected
+    High risk    - Any remaining items that are not completed and don't fit within HighRiskLimit/100*Expected.
+    
+    Parameters
+    ''''''''''    
+    HansoftProject            Name of the Hansoft project in which you want to track release risk in the product backlog.
+    TrackingColumn            Specifies the Hansoft column that tracks the release risk. This should be a readonly custom column of type Drop list single choice. There should be four values defined
+                              representing done, low risk, medium risk and high risk items respectively.
+    RiskValues                Defines the name of the different risk levels in the Hansoft client. These values must exactly match the values provided in the column defintion in Hansoft.
+                              The items are provided as a comma-separated list in the order "<done-value>, <low-risk-value>, <medium-risk-value>, <high-risk-value>".
+    Find                      A find query that should return the releases for which backlog items should be assigned a release risk.
+    PointsOrDays              Defines whether release risk is calculated based on Points or Ideal days as the estimate for backlog items. Allowed values are "Days" or "Points".
+    LowRiskLimit              Integer value for the break-off between low/medium risk as percent of the Expected value.
+    HighRiskLimit             Integer value for the break-off between medium/high risk as percent of the Expected value.
+    ElevateBlockedItems       If set to Yes, then items that are in the status Blocked will be elevated to High risk regardless of it they fit within the risk limits or not.
+    ConsiderRiskColumn        If set to Yes, then items will be elevated if to the value in the builtin Risk column if that is higher than the risk calculated based on the expected progress towards the release.
+    
+    Example
+    '''''''
+    Add tracking of the release risk in the column "Release risk" in for backlogitems that are tagged to releases found in the subproject Features in the schedule
+    part of the project MyProject. Use the estimated days burndown and values for calcualting risk and elevate any blocked items to High risk. Items that fit
+    withing 80% of the expected progress will be set to low risk. Items that fit withing 110% of the expected progress will be set to medium risk.
+    <AssignReleaseRiskBehavior HansoftProject="MyProject" TrackingColumn="Release risk" RiskValues="Done, Low risk, Medium risk, High risk" Find="Itemtype=Release AND Immediateparentsubproject:Item(Features)" PointsOrDays="Days" LowRiskLimit="80" HighRiskLimit="110" ElevatedBlockedItems="Yes" />
+
+
     Default Value Behavior
     ======================
     This behavior is used to set a column to a default value whenever an item is created. Depending on the type of the
     column the value should be specified as follows:
     
-    HansoftProject           : The Hansoft project containing the items to which data should be copied
-    View                     : Specifies the View for which the default value is applicable (Agile, Scheduled, Bugs, Backlog)
+    Parameters
+    ''''''''''    
+    HansoftProject            The Hansoft project containing the items for which default values should be set.
+    View                      Specifies the View for which the default value is applicable (Agile, Scheduled, Bugs, Backlog)
+    
+    For each column value that should have a default you specify one element. The element name is either the name of
+    the column (as listed below) or CustomColumn. For each column you then specify how the value in the DefaultValue
+    attribute of the corresponding element (see also the examples below).    
     
     Builtin columns
     '''''''''''''''
@@ -292,66 +346,38 @@
       
     Example
     '''''''
-    To set a default template for the name of new items created in the product backlog of the project MyProject, uncomment the following:
-    --> 
-    <!--
+    Set a default template for the name of new items created in the product backlog of the project MyProject.
+
     <DefaultValueBehavior HansoftProject="MyProject" View="Backlog">
       <Name DefaultValue="As a (role) I want to (something) so I can (benefit)" />
     </DefaultValueBehavior>
-    -->
 
-    <!--
-    Track Last Status Change Behavior
-    =================================
-    This behavior useful if you want to track when product backlog items last changed their status. 
 
-    The behavior has parameters as follows:
-    HansoftProject            : Name of the Hansoft project in which you want to track status changes in the product backlog.
-    TrackingColumn            : Specifies the Hansoft column to keep the time stamp for the last status change, this should be a readonly custom column of type Date and time.
+    Number Behavior
+    ===============
+    This behavior is useful if you want to have a ranking number in the product backlog hierarchy in Hansoft. The number is
+    kept in a selectable Hansoft column (of type text). When the column is added to your Hansoft project it should be set
+    to a readonly column so it isn't advertently changed.
+
+    The numbering is updated automatically as items in the product backlog hierarchy are moved/added/deleted.
+    
+    Parameters
+    ''''''''''    
+    HansoftProject            Name of the Hansoft project
+    View                      Specifies the View to which the numbering should be applied (Agile, Scheduled, Backlog)
+    NumberingStyle            Hierarchical numbering mean to e.g. to denote the second child of the first parent as 1.2, the default is Flat
+                              numbering, i.e. to number each set of siblings 1, 2, 3 and so on. Hence the supported values are "Hierarchical" or "Flat".
+    ColumnName                Specifies the Hansoft column to keep the numbering, this should be a readonly custom column of type Text
+    LabelLevels               Only specified levels in the hierarchy will be labeled. Levels are counted from the top staring with 1.
+                              Specifying this setting is exclusive with specifying the IgnoreLevels setting.
+    IgnoreLevels              Specified levels will not be labeled.  Levels are counted from the top staring with 1.
+                              Specifying this setting is exclusive with specifying the LabelLevels setting.
 
     Example
     '''''''
-    To add tracking of the last status change in the column "Status last changed" in the product backlog of the project MyProject, uncomment the following line: 
-    -->
-    <!--
-    <TrackLastStatusChangeBehavior HansoftProject="MyProject" TrackingColumn="Status last changed" />
-    -->
-
-    <!--
-    Assign Release Risk Behavior
-    ============================
-    This behavior useful if you want to track the risk that product backlog items will miss their assigned release date. The behavior automatically updates a column in the product backlog
-    that defines the release risk for an item. Items are categorized as "Done", "Low risk", "Medium risk", or "High risk". The items that are targeted to a particular release are calculated
-    in the same way as when release burndowns are calculated in the Hansoft client. Items are considered as part of a release if:
-    a) The item is committed to a sprint and that sprint is tagged to the release.
-       or
-    b) The item is not committed to a sprint but it is tagged in the product backlog to the release.
+    Add hierarchical numbering to the custom column Rank (of type text) in the product backlog of the project MyProject. 
     
-    The release risk is based on the predicted veloicty (same as if you hover over a future date in the release burndown in Hansoft) and the number of remaining working days until the
-    release date. This gives the expected number of points or ideal days that can be completed from the current time up to the release date. This is the "Expected" value. The release risk value is then calculated using
-    a  provided "Factor" that is between 0 an 1 as follows:
-    Done         - Items that have the status Completed.
-    Low risk     - Items that fit within (1-Factor)*Expected
-    Medium risk  - Items that fit within (1+Factor)*Expected
-    High risk    - Any remaining items that are not completed and don't fit within (1+Factor)*Expected.
-    
-    The behavior has parameters as follows:
-    HansoftProject            : Name of the Hansoft project in which you want to track release risk in the product backlog.
-    TrackingColumn            : Specifies the Hansoft column that tracks the release risk. This should be a readonly custom column of type Drop list single choice. There should be four values defined
-                                representing done, low risk, medium risk and high risk items respectively.
-    RiskValues                : Defines the name of the different risk levels in the Hansoft client. These values must exactly match the values provided in the column defintion in Hansoft.
-                                The items are provided as a comma-separated list in the order "<done-value>, <low-risk-value>, <medium-risk-value>, <high-risk-value>".
-    ParentName                : The releases for which backlog items should be assigned a release risk must be placed in a subproject in the Hansoft schedule with a name defined by this parameter.
-    PointsOrDays              : Defines whether release risk is calculated based on Points or Ideal days as the estimate for backlog items. Allowed values are "Days" or "Points".
-    Factor                    : The factor that is used to calculate the limits for low, medium, and high release risk. Note that your localized floating point separator should be used (comma below
-                                which you may need to change to e.g., a point depending on your locale.
-
-    Example
-    '''''''
-    To add tracking of the last status change in the column "Status last changed" in the product backlog of the project MyProject, uncomment the following line: 
-    -->
-    <!--
-    <AssignReleaseRiskBehavior HansoftProject="MyProject" TrackingColumn="Release risk" RiskValues="Done, Low risk, Medium risk, High risk" ParentName="Features" PointsOrDays="Days" Factor="0,2" />
+    <NumberBehavior HansoftProject="MyProject" View="Backlog" ColumnName="Rank" NumberingStyle="Hierarchical" LabelLevels="" IgnoreLevels="" />
     -->
   </Behaviors>
 </Configuration>

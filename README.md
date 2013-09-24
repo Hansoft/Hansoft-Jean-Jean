@@ -13,7 +13,7 @@ The example behaviors are:
 * Copy - Copy a column value from one item to another linked item. Useful for example to propagate values across projects.
 * Derive - Derive a column value automatically based on an expression referring to other columns and/or parent and/or child items
 * DefaultValue - Specify a default value for one or several columns that should be applied when items when are created.
-* AssignReleaseRisk - Tracs the risk that product backlog items will miss their assigned release date.
+* AssignReleaseRisk - Tracks the risk that product backlog items will miss their assigned release date.
 * TrackLastStatusChange - Track when product backlog items last changed their status. 
 
 Terms and conditions
@@ -69,7 +69,7 @@ Once you have built Jean and any custom behaviors you have created you need to p
 * JeanSettings.xml
 * Topshelf.dll
 * The Hansoft SDK library, typically HPMSdk.x86.dll
-* The managed wrapper for the SDK library, typically HPMSdkManaged.x86.dll
+* The managed wrapper for the SDK library, typically HPMSdkManaged_4_5.x86.dll
 
 ### Installing the prebuilt version
 There is a [prebuilt version] (Jean-Executable.zip) (Click "View Raw" to download) of Jean also that you can use and which will include all the files mentioned above. If you use the prebuilt version, make sure
@@ -106,7 +106,7 @@ Note: If you change the settings you need to restart the Jean service for them t
 
 Creating your own behaviors
 ---------------------------
-You create your own behavior by subclassing the abstract base class AbstractBehavior (in Behavior.dll) and overrding the event handler
+You create your own behavior by subclassing the abstract base class AbstractBehavior (in Behavior.dll) and overriding the event handler
 that you are interested in.
 
 To get started take a look at the provided examples. The DefaultValue behavior is a very simple behavior but demonstrates a lot of the
@@ -132,7 +132,7 @@ When you set up your behaviors you should be careful to not create circular chai
 About the ObjectWrapper
 -----------------------
 Jean is built on a wrapper around the Hansoft .Net API called ObjectWrapper. ObjectWrapper is a state-less object-oriented wrapper around the
-Hansoft API to provide an abstraction that is more in line with the end user mental model of the different artifacts in Hansoft. It is not specific
+Hansoft API to provide an abstraction that is in line with the end user mental model of the different artifacts in Hansoft. It is not specific
 to Jean but can be used to build different kinds of SDK applications.
 
 Please refer to the example behaviors for how to use ObjectWrapper in the context of Jean for Hansoft.

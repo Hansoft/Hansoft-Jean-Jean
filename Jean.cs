@@ -16,6 +16,7 @@ namespace Hansoft.Jean
                     s.WhenStarted(jean => jean.Start());
                     s.WhenStopped(jean => jean.Stop());
                 });
+                x.DependsOnEventLog();
                 x.RunAsLocalSystem();
 
                 x.SetDescription("Automatic updating of Hansoft Items");

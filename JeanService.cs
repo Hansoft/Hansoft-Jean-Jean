@@ -71,11 +71,8 @@ namespace Hansoft.Jean
                 {
                     callbackHandler = new HPMCallbackHandler(eventWindow);
                     SessionManager.Initialize(sdkUser, sdkUserPwd, server, portNumber, databaseName);
-                    SessionManager.Instance.Connect(callbackHandler, callbackSemaphore);
 
-                    if (!SessionManager.Instance.Connected)
-                        logger.Error("Could not open connection to Hansoft");
-                    else
+                    if (SessionManager.Instance.Connect(callbackHandler, callbackSemaphore))
                     {
                         //TODO: The hooking up of the event handlers should be pushed down into a registration function in CallbackHandler
                         foreach (AbstractBehavior b in behaviors)
@@ -85,6 +82,8 @@ namespace Hansoft.Jean
                             callbackHandler.TaskCreate += new System.EventHandler<TaskCreateEventArgs>(b.OnTaskCreate);
                             callbackHandler.TaskMove += new System.EventHandler<TaskMoveEventArgs>(b.OnTaskMove);
                             callbackHandler.DataHistoryReceived += new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
+                            callbackHandler.TimesheetRowChange += new System.EventHandler<TimesheetRowChangeEventArgs>(b.OnTimesheetRowChange);
+                            callbackHandler.TimesheetGetDateRangeResponse += new System.EventHandler<TimesheetGetDateRangeResponseEventArgs>(b.OnTimesheetGetDateRangeResponse);
                             callbackHandler.TaskDelete += new System.EventHandler<TaskDeleteEventArgs>(b.OnTaskDelete);
                             callbackHandler.BeginProcessBufferedEvents += new System.EventHandler<EventArgs>(b.OnBeginProcessBufferedEvents);
                             callbackHandler.EndProcessBufferedEvents += new System.EventHandler<EventArgs>(b.OnEndProcessBufferedEvents);
@@ -100,6 +99,8 @@ namespace Hansoft.Jean
                                 callbackHandler.TaskCreate -= new System.EventHandler<TaskCreateEventArgs>(b.OnTaskCreate);
                                 callbackHandler.TaskMove -= new System.EventHandler<TaskMoveEventArgs>(b.OnTaskMove);
                                 callbackHandler.DataHistoryReceived -= new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
+                                callbackHandler.TimesheetRowChange -= new System.EventHandler<TimesheetRowChangeEventArgs>(b.OnTimesheetRowChange);
+                                callbackHandler.DataHistoryReceived -= new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
                                 callbackHandler.TaskDelete -= new System.EventHandler<TaskDeleteEventArgs>(b.OnTaskDelete);
                                 callbackHandler.BeginProcessBufferedEvents -= new System.EventHandler<EventArgs>(b.OnBeginProcessBufferedEvents);
                                 callbackHandler.EndProcessBufferedEvents -= new System.EventHandler<EventArgs>(b.OnEndProcessBufferedEvents);
@@ -108,6 +109,11 @@ namespace Hansoft.Jean
 
                         startSemaphore.Release();
                         logger.Information("Jean was started");
+                    }
+                    else
+                    {
+                        startupError = true;
+                        logger.Warning("Could not connect to the Hansoft server with the specified connection parameters.");
                     }
                 }
                 catch (Exception e)
@@ -146,14 +152,17 @@ namespace Hansoft.Jean
                 if (!stopped && ! startupError)
                 {
                     EHPMError result = SessionManager.Session.SessionProcess();
+                    int iSeconds = 0;
                     if (result == EHPMError.ConnectionLost)
                     {
                         do
                         {
                             logger.Warning("The connection to the Hansoft server was lost. A reconnection attempt will be made in 10 seconds.");
                             Thread.Sleep(10000);
+                            iSeconds += 10;
                         }
                         while (!SessionManager.Instance.Reconnect());
+                        logger.Information("The connection to the Hansoft server was restored after " + iSeconds + " seconds.");
                     }
                     else if (result != EHPMError.NoError)
                         logger.Warning("SessionProcess returned an error code: " + result.ToString());
@@ -207,7 +216,7 @@ namespace Hansoft.Jean
                                         }
                                         catch (Exception e)
                                         {
-                                            logger.Exception("Error in configuration file JeanSettings.xml when loading behavior from element " + bEl.ToString() + ".", e);
+                                            logger.Exception("Error in configuration file JeanSettings.xml when loading behavior from element " + bEl.Name + ".", e);
                                         }
                                     }
                                 }
