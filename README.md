@@ -73,7 +73,7 @@ Once you have built Jean and any custom behaviors you have created you need to p
 
 ### Installing the prebuilt version
 There is a [prebuilt version] (Jean-Executable.zip) (Click "View Raw" to download) of Jean also that you can use and which will include all the files mentioned above. If you use the prebuilt version, make sure
-that you have the [.NET Framework 4.5] (http://www.microsoft.com/en-us/download/details.aspx?id=30653) installed on your intended server.
+that you have the [.NET Framework 4.5] (http://www.microsoft.com/en-us/download/details.aspx?id=30653)  and the [Visual Studio 2012 VC Redist] (http://www.microsoft.com/en-us/download/details.aspx?id=30679)installed on your intended server.
 
 ### Starting Jean for Hansoft
 You can then install/uninstall the Windows Service from the command line like this:
