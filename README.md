@@ -77,6 +77,8 @@ that you have the [.NET Framework 4.5] (http://www.microsoft.com/en-us/download/
 on your intended server. Also, after downloading the zip file, right click on it and select properties. Click unblock in the dialogue. Failure to unblock the contents may lead to that Jean cannot be started
 and/or strange error messages in the event log when attempting to do so.
 
+The prebuilt version is tested with Hansoft 7.1100 and should work with later versions as well.
+
 ### Starting Jean for Hansoft
 You can then install/uninstall the Windows Service from the command line like this:
 	Jean install
