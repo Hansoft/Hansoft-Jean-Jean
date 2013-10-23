@@ -81,10 +81,12 @@ The prebuilt version is tested with Hansoft 7.1100 and should work with later ve
 
 ### Starting Jean for Hansoft
 You can then install/uninstall the Windows Service from the command line like this:
+
 	Jean install
 	Jean uninstall
 
 Once the service is installed you can manage it from Control Panel/Administrative Tools/Services. You can also start/stop it from the command line like this:
+
     Jean start
     Jean stop
 
