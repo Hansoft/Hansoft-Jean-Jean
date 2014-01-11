@@ -62,6 +62,26 @@ namespace Hansoft.Jean
             logger.Information("Jean was loaded");
         }
 
+        public void OnProjectCreateCompleted(object sender, EventArgs e)
+        {
+            InitializeBehaviors();
+        }
+
+        public void InitializeBehaviors()
+        {
+            foreach (AbstractBehavior b in behaviors)
+            {
+                try
+                {
+                    b.Initialize(callbackHandler.BufferEvents, extensionAssemblies, logger);
+                }
+                catch (Exception e)
+                {
+                    logger.Exception("Error when initializing behavior " + b.Title + ". The behavior will not be applied.", e);
+                }
+            }
+        }
+
         public void Start()
         {
             if (!loadingError)
@@ -70,6 +90,7 @@ namespace Hansoft.Jean
                 try
                 {
                     callbackHandler = new HPMCallbackHandler(eventWindow);
+                    callbackHandler.ProjectCreateCompleted += new System.EventHandler<EventArgs>(OnProjectCreateCompleted);
                     SessionManager.Initialize(sdkUser, sdkUserPwd, server, portNumber, databaseName);
 
                     if (SessionManager.Instance.Connect(callbackHandler, callbackSemaphore))
@@ -82,29 +103,11 @@ namespace Hansoft.Jean
                             callbackHandler.TaskCreate += new System.EventHandler<TaskCreateEventArgs>(b.OnTaskCreate);
                             callbackHandler.TaskMove += new System.EventHandler<TaskMoveEventArgs>(b.OnTaskMove);
                             callbackHandler.DataHistoryReceived += new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
-                            callbackHandler.TimesheetRowChange += new System.EventHandler<TimesheetRowChangeEventArgs>(b.OnTimesheetRowChange);
-                            callbackHandler.TimesheetGetDateRangeResponse += new System.EventHandler<TimesheetGetDateRangeResponseEventArgs>(b.OnTimesheetGetDateRangeResponse);
+                            callbackHandler.ProjectCreate += new System.EventHandler<ProjectCreateEventArgs>(b.OnProjectCreate);
                             callbackHandler.TaskDelete += new System.EventHandler<TaskDeleteEventArgs>(b.OnTaskDelete);
                             callbackHandler.BeginProcessBufferedEvents += new System.EventHandler<EventArgs>(b.OnBeginProcessBufferedEvents);
                             callbackHandler.EndProcessBufferedEvents += new System.EventHandler<EventArgs>(b.OnEndProcessBufferedEvents);
-                            try
-                            {
-                                b.Initialize(callbackHandler.BufferEvents, extensionAssemblies, logger);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Exception("Error when initializing behavior " + b.Title + ". The behavior will not be applied.", e);
-                                callbackHandler.TaskChange -= new System.EventHandler<TaskChangeEventArgs>(b.OnTaskChange);
-                                callbackHandler.TaskChangeCustomColumnData -= new System.EventHandler<TaskChangeCustomColumnDataEventArgs>(b.OnTaskChangeCustomColumnData);
-                                callbackHandler.TaskCreate -= new System.EventHandler<TaskCreateEventArgs>(b.OnTaskCreate);
-                                callbackHandler.TaskMove -= new System.EventHandler<TaskMoveEventArgs>(b.OnTaskMove);
-                                callbackHandler.DataHistoryReceived -= new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
-                                callbackHandler.TimesheetRowChange -= new System.EventHandler<TimesheetRowChangeEventArgs>(b.OnTimesheetRowChange);
-                                callbackHandler.DataHistoryReceived -= new System.EventHandler<DataHistoryReceivedEventArgs>(b.OnDataHistoryReceived);
-                                callbackHandler.TaskDelete -= new System.EventHandler<TaskDeleteEventArgs>(b.OnTaskDelete);
-                                callbackHandler.BeginProcessBufferedEvents -= new System.EventHandler<EventArgs>(b.OnBeginProcessBufferedEvents);
-                                callbackHandler.EndProcessBufferedEvents -= new System.EventHandler<EventArgs>(b.OnEndProcessBufferedEvents);
-                            }
+                            InitializeBehaviors();
                         }
 
                         startSemaphore.Release();
