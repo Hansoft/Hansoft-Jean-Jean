@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Configuration>
-  
+
   <!--
   Configuration - Loading Assemblies
   ==================================
@@ -18,7 +18,7 @@
     <Assembly Path="AssignReleaseRiskBehavior.dll" />
     <Assembly Path="DerivedColumnExpressionExample.dll" />
   </LoadAssemblies>
-  
+
   <!--
   Configuration - Connecting to a Hansoft Database
   =================================================
@@ -36,13 +36,13 @@
   HansoftSdkUserPassword    : Password of the Hansoft SDK User account
   HansoftDatabase           : Name of the Hansoft Database to get data from
   EventWindow               : The max number of milliseconds that events will be buffered/queued for. This is used to avoid excessive server load when
-                                you have behaviors that potentially have a significant impact on the server load.
+                              you have behaviors that potentially have a significant impact on the server load.
   Example
   '''''''
   Connect to the database MyDB on the Hansoft server running on the local machine on port 50256 as the SDK user sdk with password sdk. Use event buffering upto 1 second.
   <Connection HansoftServerHost="localhost" HansoftServerPort="50256" HansoftDatabase="MyDB" HansoftSdkUser="sdk" HansoftSdkUserPassword="sdk" EventWindow="1000"/>
   -->
-  
+
   <!-- 
   In the Behaviors section you specify what behaviors that you want to apply. You can specify multiple behaviors of the same or different types as you like.
   NOTE: Whenever you add additional behaviors it is important that you monitor server load carefully for some time including peak usage to avoid adding
@@ -141,7 +141,12 @@
     
     Parameters
     ''''''''''
-    HansoftProject      : The Hansoft project containing the items for which column values should be derived
+    HansoftProject      : A regular expression (see: http://msdn.microsoft.com/en-us/library/az24scfc(v=vs.110).aspx) specifying the Hansoft
+                          projects for which the behavior should be applied.
+    InvertedMatch       : If not specified, or if the value is any other than 'Yes', then the behavior will be applied for all projects
+                          that match the regular expression specified with the HansoftProject parameter. If the value is 'Yes', then the
+                          behavior will be applied for all projects except the ones that match the regular expression specified with the
+                          HansoftProject parameter
     View                : Specifies the View in which the items are found (Agile, Scheduled, Bugs, Backlog)
     Find                : A Find query that specifies the items for which column values should be derived.
     
@@ -213,7 +218,7 @@
     6. Set the custom column completion count to the result of the static function CompletionCount defined in the CompletionCounter class which is a custom
     class defined in an assembly that is loaded in the <LoadAssemblies> section.
 
-    <DeriveBehavior HansoftProject="MyProject" View="Backlog" Find="">
+    <DeriveBehavior HansoftProject="^MyProject\z" View="Backlog" Find="">
       <EstimatedDays Expression="current_task.Points" />
       <CustomColumn Name="Child count" Expression="current_task.Children.Count" />
       <CustomColumn Name="Aggregated Status" Expression="current_task.AggregatedStatus" />
@@ -229,8 +234,13 @@
     that have entered a certain status in a certain timespan. This behavior should be used in combination with the Derive behavior as described below.
 
     Parameters
-    ''''''''''    
-    HansoftProject            Name of the Hansoft project in which you want to track status changes in the product backlog.
+    ''''''''''
+    HansoftProject            A regular expression (see: http://msdn.microsoft.com/en-us/library/az24scfc(v=vs.110).aspx) specifying the Hansoft
+                              projects for which the behavior should be applied.
+    InvertedMatch             If not specified, or if the value is any other than 'Yes', then the behavior will be applied for all projects
+                              that match the regular expression specified with the HansoftProject parameter. If the value is 'Yes', then the
+                              behavior will be applied for all projects except the ones that match the regular expression specified with the
+                              HansoftProject parameter
     View                      Specifies the View for which status changes should be tracked (Agile, Scheduled, Backlog)
     TrackingColumn            Specifies the Hansoft column to keep the time stamp for the last status change, this should be a readonly custom column of type Date and time.
     TrackedColumn             Specified the column to track. This should normally be set up so that this is a read-only custom column of type text that is set to the
@@ -238,8 +248,8 @@
 
     Example
     '''''''
-    Add tracking of the last status change in the column "Status last changed" in the product backlog of the project MyProject.
-    <DeriveBehavior HansoftProject="MyProject" View="Backlog" Find="">
+    Add tracking of the last status change in the column "Status last changed" in the product backlog for all projects with a name that starts with "Portfolio - ", or starts with "Program - ".
+    <DeriveBehavior HansoftProject="(^Portfolio - |^Program - )" View="Backlog" Find="">
       <CustomColumn Name="Aggregated status" Expression="current_task.AggregatedStatus" />
     </DeriveBehavior>
     <TrackLastStatusChangeBehavior HansoftProject="MyProject" View="Backlog" TrackingColumn="Status last changed" TrackedColumn="Aggregated status"/>
@@ -263,25 +273,31 @@
     High risk    - Any remaining items that are not completed and don't fit within HighRiskLimit/100*Expected.
     
     Parameters
-    ''''''''''    
-    HansoftProject            Name of the Hansoft project in which you want to track release risk in the product backlog.
-    TrackingColumn            Specifies the Hansoft column that tracks the release risk. This should be a readonly custom column of type Drop list single choice. There should be four values defined
+    ''''''''''
+    HansoftProject          : A regular expression (see: http://msdn.microsoft.com/en-us/library/az24scfc(v=vs.110).aspx) specifying the Hansoft
+                              projects for which the behavior should be applied.
+    InvertedMatch           : If not specified, or if the value is any other than 'Yes', then the behavior will be applied for all projects
+                              that match the regular expression specified with the HansoftProject parameter. If the value is 'Yes', then the
+                              behavior will be applied for all projects except the ones that match the regular expression specified with the
+                              HansoftProject parameter
+    TrackingColumn          : Specifies the Hansoft column that tracks the release risk. This should be a readonly custom column of type Drop list single choice. There should be four values defined
                               representing done, low risk, medium risk and high risk items respectively.
-    RiskValues                Defines the name of the different risk levels in the Hansoft client. These values must exactly match the values provided in the column defintion in Hansoft.
+    RiskValues              : Defines the name of the different risk levels in the Hansoft client. These values must exactly match the values provided in the column defintion in Hansoft.
                               The items are provided as a comma-separated list in the order "<done-value>, <low-risk-value>, <medium-risk-value>, <high-risk-value>".
-    Find                      A find query that should return the releases for which backlog items should be assigned a release risk.
-    PointsOrDays              Defines whether release risk is calculated based on Points or Ideal days as the estimate for backlog items. Allowed values are "Days" or "Points".
-    LowRiskLimit              Integer value for the break-off between low/medium risk as percent of the Expected value.
-    HighRiskLimit             Integer value for the break-off between medium/high risk as percent of the Expected value.
-    ElevateBlockedItems       If set to Yes, then items that are in the status Blocked will be elevated to High risk regardless of it they fit within the risk limits or not.
-    ConsiderRiskColumn        If set to Yes, then items will be elevated if to the value in the builtin Risk column if that is higher than the risk calculated based on the expected progress towards the release.
+    Find                    : A find query that should return the releases for which backlog items should be assigned a release risk.
+    PointsOrDays            : Defines whether release risk is calculated based on Points or Ideal days as the estimate for backlog items. Allowed values are "Days" or "Points".
+    LowRiskLimit            : Integer value for the break-off between low/medium risk as percent of the Expected value.
+    HighRiskLimit           : Integer value for the break-off between medium/high risk as percent of the Expected value.
+    ElevateBlockedItems     : If set to Yes, then items that are in the status Blocked will be elevated to High risk regardless of it they fit within the risk limits or not.
+    ConsiderRiskColumn      : If set to Yes, then items will be elevated if to the value in the builtin Risk column if that is higher than the risk calculated based on the expected progress towards the release.
     
     Example
     '''''''
     Add tracking of the release risk in the column "Release risk" in for backlogitems that are tagged to releases found in the subproject Features in the schedule
-    part of the project MyProject. Use the estimated days burndown and values for calcualting risk and elevate any blocked items to High risk. Items that fit
-    withing 80% of the expected progress will be set to low risk. Items that fit withing 110% of the expected progress will be set to medium risk.
-    <AssignReleaseRiskBehavior HansoftProject="MyProject" TrackingColumn="Release risk" RiskValues="Done, Low risk, Medium risk, High risk" Find="Itemtype=Release AND Immediateparentsubproject:Item(Features)" PointsOrDays="Days" LowRiskLimit="80" HighRiskLimit="110" ElevatedBlockedItems="Yes" />
+    part of all projects with a name that starts with "Program - ". Use the estimated days burndown and values for calculating risk and elevate any blocked items to
+    High risk. Items that fit withing 80% of the expected progress will be set to low risk. Items that fit withing 110% of the expected progress will be set to medium risk.
+    
+    <AssignReleaseRiskBehavior HansoftProject="^Program - " InvertedMatch="Yes" TrackingColumn="Release risk" RiskValues="Done, Low risk, Medium risk, High risk" Find="Itemtype=Release AND Immediateparentsubproject:Item(Features)" PointsOrDays="Days" LowRiskLimit="80" HighRiskLimit="110" ElevatedBlockedItems="Yes" />
 
 
     Default Value Behavior
@@ -290,7 +306,7 @@
     column the value should be specified as follows:
     
     Parameters
-    ''''''''''    
+    ''''''''''
     HansoftProject            The Hansoft project containing the items for which default values should be set.
     View                      Specifies the View for which the default value is applicable (Agile, Scheduled, Bugs, Backlog)
     
