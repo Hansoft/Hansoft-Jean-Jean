@@ -53,7 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HPMSdkManaged_4_5.x86">
-      <HintPath>..\..\HansoftSDK_7_105\Win32\HPMSdkManaged_4_5.x86.dll</HintPath>
+      <HintPath>..\HansoftSDK\Win32\HPMSdkManaged_4_5.x86.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,6 +80,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Default_JeanSettings.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="JeanSettings.xml">
       <SubType>Designer</SubType>
     </Content>
