@@ -15,6 +15,9 @@ The example behaviors are:
 * DefaultValue - Specify a default value for one or several columns that should be applied when items when are created.
 * AssignReleaseRisk - Tracks the risk that product backlog items will miss their assigned release date.
 * TrackLastStatusChange - Track when product backlog items last changed their status. 
+* ShadowBacklog - Replicated the product backlog of one project to another project
+* IntermediateRank - Maintain a column showing order/priority in addition to the builtin hierarchcial order and priority
+* CloneProject - (In development) Use a project as a template to clone a new project
 
 Terms and conditions
 --------------------

@@ -16,6 +16,8 @@
     <Assembly Path="DefaultValueBehavior.dll" />
     <Assembly Path="TrackLastStatusChangeBehavior.dll" />
     <Assembly Path="AssignReleaseRiskBehavior.dll" />
+    <Assembly Path="ShadowBacklogBehavior.dll" />
+    <Assembly Path="IntermediateRankBehavior.dll" />
     <Assembly Path="DerivedColumnExpressionExample.dll" />
   </LoadAssemblies>
 
@@ -378,7 +380,7 @@
     The numbering is updated automatically as items in the product backlog hierarchy are moved/added/deleted.
     
     Parameters
-    ''''''''''    
+    ''''''''''
     HansoftProject            Name of the Hansoft project
     View                      Specifies the View to which the numbering should be applied (Agile, Scheduled, Backlog)
     NumberingStyle            Hierarchical numbering mean to e.g. to denote the second child of the first parent as 1.2, the default is Flat
@@ -394,6 +396,76 @@
     Add hierarchical numbering to the custom column Rank (of type text) in the product backlog of the project MyProject. 
     
     <NumberBehavior HansoftProject="MyProject" View="Backlog" ColumnName="Rank" NumberingStyle="Hierarchical" LabelLevels="" IgnoreLevels="" />
-    -->
+    
+    
+    Shadow Backlog Behavior
+    =======================
+    This is a highly specialized behavior to replicate the product backlog of one project (source project) to the product backlog of another
+    project (shadow project). The replicated backlog will always synchronize with the source backlog, hence it is not possible to delete, add,
+    or move items in the shadow backlog. If you make such changes they will immediately be reverted to the state of the backlog in the source project.
+    
+    Parameters
+    ''''''''''    
+    SourceProject            Name of the Hansoft project for which the backlog should be replicated.
+    ShadowProject            Name of the Hansoft project that will have its product backlog synchronized with the product backlog of the source project.
+    SourceDataBaseIDColumn   The name of a custom column in the product backlog of the shadow project. The column should be of type text and set to be
+                             readonly. The column will be used to track the Database ID of the corresponding item in the source project.
+    
+    For each column that should be replicated you then specify one child element. The child elements can either be of type CustomColumn where the name of
+    the column is specified with the Name attribute, or one of the following to indicate one of the builtin columns in Hansoft:
+    * Risk
+    * Priority
+    * EstimatedDays
+    * Category
+    * Points
+    * Status
+    * Confidence
+    * Hyperlink
+    * Name
+    * WorkRemaining
+    
+    Example
+    '''''''
+    Replicate the backlog from the Hansoft project "My project" to the backlog of the Hansoft project "My shadow". Only the specified columns will be
+    replicated. The column "Source ID" must exist in the product backlog of the shadow project to track the database ID of the corresponding item in
+    the source project.
+
+    <ShadowBacklogBehavior SourceProject="My project" ShadowProject="My shadow" SourceDataBaseIDColumn="Source ID">
+      <Name/>
+      <Status/>
+      <Priority/>
+      <EstimatedDays/>
+    </ShadowBacklogBehavior>
+
+    Intermediate Rank Behavior
+    ==========================
+    This is a highly specialized behavior that allows you have a column with a number that defines a strict order of items (in addition to the order
+    defined by the hierarchy or the priority views). To change the order of the items you manually enter an intermediate number for an item in 
+    the Hansoft client to define its position. Items will then me renumbered to be a sequence of whole numbers starting with 1. For Example, if 
+    you have the following values for a set of items in Hansoft
+    ItemA   1
+    ItemB   2
+    ItemC   3
+    
+    and then for ItemC enter the number 0, then the items will be renumbered to be:
+    ItemA   2
+    ItemB   3
+    ItemC   1
+    
+    Parameters
+    ''''''''''
+    HansoftProject            Name of the Hansoft project
+    View                      Specifies the View to which the numbering should be applied (Agile, Scheduled, Backlog)
+    ColumnName                Specifies the Hansoft column to keep the numbering, this should be a writable custom column of type Text
+    Find                      A Find query that specifies the items for which the numbering is applicable.
+    
+    Example
+    '''''''
+    In the product backlog for the Hansoft project "My project" use the column with the name "Prio2" to keep an intermediate ranking number. The
+    ranking is applicable for all direct children of the item with the name "Features".
+    
+    <IntermediateRankBehavior HansoftProject="My project" View="Backlog" ColumnName="Prio2" Find="Immediateparentsubproject:Item(Features)"/>
+-->
   </Behaviors>
 </Configuration>
+
