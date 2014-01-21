@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackLastStatusChangeBehavi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssignReleaseRiskBehavior", "..\Hansoft-Jean-AssignReleaseRiskBehavior\AssignReleaseRiskBehavior.csproj", "{248C9639-B6CE-4038-AF89-4A58686CBBFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloneProjectBehaviorBehavior", "..\Hansoft-Jean-CloneProjectBehavior\CloneProjectBehaviorBehavior.csproj", "{BD763D10-2829-475D-8F5B-7841FB0602D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloneProjectBehavior", "..\Hansoft-Jean-CloneProjectBehavior\CloneProjectBehavior.csproj", "{BD763D10-2829-475D-8F5B-7841FB0602D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntermediateRankBehavior", "..\Hansoft-Jean-IntermediateRankBehavior\IntermediateRankBehavior.csproj", "{6750991C-3135-487E-9625-522E36B3DB0E}"
 EndProject

@@ -80,9 +80,6 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Default_JeanSettings.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="JeanSettings.xml">
       <SubType>Designer</SubType>
     </Content>
