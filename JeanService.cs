@@ -67,6 +67,11 @@ namespace Hansoft.Jean
             InitializeBehaviors();
         }
 
+        public void OnProjectDeleteCompleted(object sender, EventArgs e)
+        {
+            InitializeBehaviors();
+        }
+
         public void InitializeBehaviors()
         {
             foreach (AbstractBehavior b in behaviors)

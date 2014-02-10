@@ -18,6 +18,7 @@
     <Assembly Path="AssignReleaseRiskBehavior.dll" />
     <Assembly Path="ShadowBacklogBehavior.dll" />
     <Assembly Path="IntermediateRankBehavior.dll" />
+    <Assembly Path="CloneProjectBehavior.dll" />
     <Assembly Path="DerivedColumnExpressionExample.dll" />
   </LoadAssemblies>
 
@@ -465,6 +466,16 @@
     ranking is applicable for all direct children of the item with the name "Features".
     
     <IntermediateRankBehavior HansoftProject="My project" View="Backlog" ColumnName="Prio2" Find="Immediateparentsubproject:Item(Features)"/>
+    
+    Clone Project Behavior
+    ======================
+    This project should be used together with a Hansoft client plugin called: https://github.com/Hansoft/HansoftCloneProjectClientPlugin. See
+    the documentation of the plugin for more information.
+    
+    Example
+    '''''''
+    Activate the behavior for the current database.
+    <CloneProjectBehavior />
 -->
   </Behaviors>
 </Configuration>
