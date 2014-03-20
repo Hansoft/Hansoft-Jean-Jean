@@ -1,0 +1,21 @@
+
+. Consider to change remaining behaviors to use RegExp to specify the Project parameter (DefaultValueBehavior, CopyBehavior???, NumberBehavior)
+. Introduce a notion of dependent projects for the derivebehavior so that we can specify that we actually need to consider
+  events from other projectsin addition to the target. For now I just deactivated the check on the project id to make sure it is
+  of for the Schneider SAFe demo
+. The CODE tag is not handeld in the Hansoft rich text utilities.
+. There is an issue with if you delete resources (or perhaps other values) in a custom columnn (perhaps assignment also) that you will get an illegal value back
+and we need to check for that.
+
+
+. Do a demonstration video.
+----------------------
+Nice to haves
+. Tidy up the code, check TODO: (refactoring)
+. Review doc comments and Doxygen settings to make sure that the Api reference is linked correctly and looks good.
+. Support for more columns in the behaviors (AssignedTo, WorkflowStatus some readonly columns like created by Last Updated etc.)
+. Make the ObjectWrapper more complete (check what is missing, mostly readonly stuff I believe...  Comments? All of the Bug fields (Description, Step to Repro) User Story)
+. Consider to add the instance cache again but make it optional (by a setting on HansoftItem for example) and add a method for clearing
+  the cache every now and then (for example when we start to process events)
+. Strip markup when a multiline column is mapped to a "non-multi line" column in the Copy behavior.
+. Make it possible to add hidden custom columns in the configuration file for intermediate derived values.
