@@ -397,6 +397,54 @@
     Add hierarchical numbering to the custom column Rank (of type text) in the product backlog of the project MyProject. 
     
     <NumberBehavior HansoftProject="MyProject" View="Backlog" ColumnName="Rank" NumberingStyle="Hierarchical" LabelLevels="" IgnoreLevels="" />
+
+
+    Trigger Behavior
+    ===============
+    This behavior is useful if you want to perform arithmetics expressions on item colums when things change. It can only affect the data in the 
+    changed column, so it's currently not possible to change one items column value based of a change in another item.
+    It's based on conditional statements that triggers a sequence of behaviors when true.
+    
+    Parameters
+    ''''''''''
+    HansoftProject      : A regular expression (see: http://msdn.microsoft.com/en-us/library/az24scfc(v=vs.110).aspx) specifying the Hansoft
+                          projects for which the behavior should be applied.
+    InvertedMatch       : If not specified, or if the value is any other than 'Yes', then the behavior will be applied for all projects
+                          that match the regular expression specified with the HansoftProject parameter. If the value is 'Yes', then the
+                          behavior will be applied for all projects except the ones that match the regular expression specified with the
+                          HansoftProject parameter
+    View                : Specifies the View in which the items are found (Agile, Scheduled, Bugs, Backlog)
+    Condtion            : An conditional expression that evaluates to a bool. If triggered the statements (that should be separated by new lines)
+                          will be executed.  
+                          
+    Syntax:
+    ''''''''''
+     Column syntax: $COLUMNNAME (case sensitive)
+     String syntax: 'String'
+     Constants: TIMENOW
+     Operators: +,-,/,*,<,<=,>,>=,!=,==
+     Paranthesis to encapsulate expressions
+     List syntax: [item1,item2,item3]
+
+    Example
+    '''''''
+    Add hierarchical numbering to the custom column Rank (of type text) in the product backlog of the project MyProject. 
+    
+       <TriggerBehavior HansoftProject="Test Cases" View="Backlog">
+           <Condition Expression="$WorkflowStatus == 'Test Passed'">
+             $Last Run = TIMENOW
+             $Latest Pass = TIMENOW
+             $Times Run = $Times Run + 1
+             $Times Passed = $Times Passed + 1
+           </Condition>
+           <Condition Expression="$WorkflowStatus == 'Test Failed'">
+             $Last Run = TIMENOW
+             $Times Run = $Times Run + 1
+           </Condition>
+           <Condition Expression="$Times Run > 5">
+             $Test steps = $Test steps + 'Number of times run: '+ $Times Run +'\n'
+           </Condition>
+         </TriggerBehavior>  
     
     
     Shadow Backlog Behavior

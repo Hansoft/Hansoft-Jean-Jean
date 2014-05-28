@@ -116,7 +116,7 @@ namespace Hansoft.Jean
                         }
 
                         startSemaphore.Release();
-                        logger.Information("Jean was started");
+                        logger.Information("Jean connected to " + server + ": " + portNumber + " (" + databaseName + ")");
                     }
                     else
                     {
@@ -279,7 +279,7 @@ namespace Hansoft.Jean
                         bool wasBehaviorAssembly = false;
                         foreach (Type type in loadedAssembly.DefinedTypes)
                         {
-                            if (type.BaseType.FullName == "Hansoft.Jean.Behavior.AbstractBehavior")
+                            if (type.BaseType != null && type.BaseType.FullName == "Hansoft.Jean.Behavior.AbstractBehavior")
                             {
                                 behaviorTypes.Add(type);
                                 wasBehaviorAssembly = true;
